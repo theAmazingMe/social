@@ -9,9 +9,14 @@ import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { NithModeSwitch } from "../nightModeSwitch";
 import { AppContext } from "../../../App";
 import { AppContextType } from "../../../resources/types";
+import { auth } from "../../../config/Firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { LoginLogout } from "./loginLogoutButton";
+import { NavItem } from "react-bootstrap";
 
 export const NavBar = () => {
 	const { theme } = useContext(AppContext) as AppContextType;
+	const [user] = useAuthState(auth);
 
 	return (
 		<div>
@@ -22,22 +27,20 @@ export const NavBar = () => {
 						<Nav.Link as={Link} to="/">
 							Home
 						</Nav.Link>
-						<Nav.Link as={Link} to="login">
-							Login
-						</Nav.Link>
 					</Nav>
 					<Nav className="with-spacer">
-						<NavbarCollapse className="justify-content-end">
+						<Navbar.Collapse className="justify-content-end with-spacer">
+							<NavItem>
+								<LoginLogout/>
+							</NavItem>
 							<Navbar.Text>
+								&nbsp;
 								<FontAwesomeIcon
 									icon={icon({ name: "user", style: "solid" })}
 								/>
-								&nbsp;{/*username*/}
+								&nbsp;{user?.displayName}
 							</Navbar.Text>
-						</NavbarCollapse>
-						<Navbar.Collapse className="justify-content-end">
 							<Navbar.Text>
-								{" "}
 								<NithModeSwitch />
 							</Navbar.Text>
 						</Navbar.Collapse>
